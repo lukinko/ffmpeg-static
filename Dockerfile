@@ -1,4 +1,8 @@
-FROM ubuntu:bionic
+#FROM ubuntu:bionic
+#FROM nvidia/cuda:11.6.2-cudnn8-devel-ubuntu20.04
+FROM nvidia/cuda:11.8.0-devel-ubuntu20.04
+
+ARG DEBIAN_FRONTEND=noninteractive
 
 # Basic packages needed to download dependencies and unpack them.
 RUN apt-get update && apt-get install -y \
@@ -7,6 +11,7 @@ RUN apt-get update && apt-get install -y \
   tar \
   wget \
   xz-utils \
+  git \
   && rm -rf /var/lib/apt/lists/*
 
 # Install packages necessary for compilation.

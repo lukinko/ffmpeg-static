@@ -211,11 +211,18 @@ download \
   "4bec86331abef56129f9d1c994823f03" \
   "https://github.com/xiph/speex/archive/"
 
+#download \
+#  "n4.0.tar.gz" \
+#  "ffmpeg4.0.tar.gz" \
+#  "4749a5e56f31e7ccebd3f9924972220f" \
+#  "https://github.com/FFmpeg/FFmpeg/archive"
+
 download \
-  "n4.0.tar.gz" \
-  "ffmpeg4.0.tar.gz" \
-  "4749a5e56f31e7ccebd3f9924972220f" \
+  "n5.0.2.tar.gz" \
+  "n5.0.2.tar.gz" \
+  "875b5250eb7ccd68e60cc9b65dd891c6" \
   "https://github.com/FFmpeg/FFmpeg/archive"
+
 
 [ $download_only -eq 1 ] && exit 0
 
@@ -273,7 +280,7 @@ cd $BUILD_DIR/x265*
 cd build/linux
 [ $rebuild -eq 1 ] && find . -mindepth 1 ! -name 'make-Makefiles.bash' -and ! -name 'multilib.sh' -exec rm -r {} +
 PATH="$BIN_DIR:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$TARGET_DIR" -DENABLE_SHARED:BOOL=OFF -DSTATIC_LINK_CRT:BOOL=ON -DENABLE_CLI:BOOL=OFF ../../source
-sed -i '' 's/-lgcc_s/-lgcc_eh/g' x265.pc
+sed -i 's/-lgcc_s/-lgcc_eh/g' x265.pc
 make -j $jval
 make install
 
@@ -411,6 +418,15 @@ cd $BUILD_DIR/speex*
 make -j $jval
 make install
 
+echo "*** Adding nv-codec-headers ***"
+cd $BUILD_DIR/
+git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git 
+cd nv-codec-headers
+make
+make install
+cd $BUILD_DIR/
+rm -rf nv-codec-headers
+
 # FFMpeg
 echo "*** Building FFmpeg ***"
 cd $BUILD_DIR/FFmpeg*
@@ -455,7 +471,17 @@ if [ "$platform" = "linux" ]; then
     --enable-libxvid \
     --enable-libzimg \
     --enable-nonfree \
-    --enable-openssl
+    --enable-openssl \
+    --enable-nvenc \
+    --enable-cuvid \
+    --enable-cuda 
+    
+    #nie da sie statycznie:
+    #--enable-libnpp  
+    
+
+    
+    
 elif [ "$platform" = "darwin" ]; then
   [ ! -f config.status ] && PATH="$BIN_DIR:$PATH" \
   PKG_CONFIG_PATH="${TARGET_DIR}/lib/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/local/Cellar/openssl/1.0.2o_1/lib/pkgconfig" ./configure \

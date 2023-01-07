@@ -1,3 +1,15 @@
+cuda
+----
+
+    https://docs.nvidia.com/datacenter/tesla/tesla-installation-notes/index.html#ubuntu-lts
+    https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu
+   
+docker
+------
+    https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker
+
+
+
 FFmpeg static build
 ===================
 
